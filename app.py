@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
-import matplotlib.font_manager as fm
+import koreanize_matplotlib
 
 # 한글 폰트 설정
-plt.rcParams['font.family'] = 'NanumGothic'
+plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
 
 # 페이지 설정
@@ -55,8 +55,6 @@ if analysis_type == "이력서 분석":
                 fig1 = plt.figure(figsize=(10, 6))
                 sns.histplot(data=df, x='경력', bins=20)
                 plt.title("경력 분포")
-                plt.xlabel("경력 (년)")
-                plt.ylabel("빈도")
                 st.pyplot(fig1)
         
         with col2:
@@ -65,8 +63,6 @@ if analysis_type == "이력서 분석":
                 fig2 = plt.figure(figsize=(10, 6))
                 df['학력'].value_counts().plot(kind='bar')
                 plt.title("학력 분포")
-                plt.xlabel("학력")
-                plt.ylabel("인원")
                 plt.xticks(rotation=45)
                 st.pyplot(fig2)
 
@@ -89,8 +85,6 @@ else:
     df['연령대'] = pd.cut(df['연령'], bins=[20, 30, 40, 50, 60], labels=['20-30', '31-40', '41-50', '51-60'])
     sns.boxplot(data=df, x='연령대', y='연봉')
     plt.title("연령대별 평균 연봉 분포")
-    plt.xlabel("연령대")
-    plt.ylabel("연봉 (만원)")
     st.pyplot(fig)
     
     # 경력과 연봉의 상관관계
@@ -98,10 +92,4 @@ else:
     fig = plt.figure(figsize=(10, 6))
     sns.scatterplot(data=df, x='경력', y='연봉')
     plt.title("경력과 연봉의 상관관계")
-    plt.xlabel("경력 (년)")
-    plt.ylabel("연봉 (만원)")
-    st.pyplot(fig)
-    
-    # 상관계수 계산
-    correlation = df['경력'].corr(df['연봉'])
-    st.write(f"경력과 연봉의 상관계수: {correlation:.3f}") 
+    st.pyplot(fig) 
