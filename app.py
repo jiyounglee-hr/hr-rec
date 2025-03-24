@@ -5,18 +5,46 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
-import koreanize_matplotlib
+import PyPDF2
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
 
-# 한글 폰트 설정
-plt.rcParams['font.family'] = 'Malgun Gothic'
-plt.rcParams['axes.unicode_minus'] = False
+# 환경 변수 로드
+load_dotenv()
+
+# OpenAI API 키 확인
+api_key = os.getenv('OPENAI_API_KEY')
+if not api_key:
+    st.error("""
+        OpenAI API 키가 설정되지 않았습니다. 
+        Streamlit Cloud의 'Manage app' > 'Secrets'에서 OPENAI_API_KEY를 설정해주세요.
+    """)
+    st.stop()
+
+# OpenAI 클라이언트 초기화
+client = OpenAI(api_key=api_key)
+
+# 세션 상태 초기화
+if 'analysis_result' not in st.session_state:
+    st.session_state['analysis_result'] = None
+if 'interview_questions' not in st.session_state:
+    st.session_state['interview_questions'] = None
+if 'job_description' not in st.session_state:
+    st.session_state['job_description'] = None
+if 'current_page' not in st.session_state:
+    st.session_state['current_page'] = 'resume'
 
 # 페이지 설정
 st.set_page_config(
-    page_title="이력서 분석 시스템",
+    page_title="뉴로핏 채용 - 이력서 분석",
     page_icon="📊",
     layout="wide"
 )
+
+# 한글 폰트 설정
+plt.rcParams['font.family'] = 'Noto Sans KR'
+plt.rcParams['axes.unicode_minus'] = False
 
 # 제목
 st.title("📊 이력서 분석 및 처우 분석 시스템")
